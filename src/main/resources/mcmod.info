@@ -1,0 +1,16 @@
+[
+{
+  "modid": "hypixelapi",
+  "name": "Hypixel API",
+  "description": "Hypixel Stats lookup.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["nur"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
