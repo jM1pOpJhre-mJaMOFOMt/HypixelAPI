@@ -24,7 +24,7 @@ public class HypixelAPIMod {
 
     public static Gson gson = new Gson();
 
-    public static JsonParser parser = new JsonParser();
+    public static final JsonParser parser = new JsonParser();
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
