@@ -1,22 +1,20 @@
 package com.nur.hypixelapi;
 
 import java.io.File;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
 public class ConfigHandler {
     public static Configuration config;
-    private static String file = "config/"+HypixelAPIMod.MODID+".cfg";
-
-    public ConfigHandler() {
-    }
+    private static String file = "config/" + HypixelAPIMod.MODID + ".cfg";
 
     public static void init() {
         config = new Configuration(new File(file));
 
         try {
             config.load();
-        } catch (Exception var4) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -32,7 +30,7 @@ public class ConfigHandler {
             if (config.hasCategory(category)) {
                 config.removeCategory(new ConfigCategory(category));
             }
-        } catch (Exception var5) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -45,36 +43,31 @@ public class ConfigHandler {
 
         try {
             config.load();
-            if (config.getCategory(category).containsKey(key)) {
-                config.getCategory(category).remove(key);
-            }
-        } catch (Exception var6) {
+            if (config.getCategory(category).containsKey(key)) config.getCategory(category).remove(key);
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
         }
-
     }
 
     public static int getInt(String category, String key) {
         config = new Configuration(new File(file));
 
-        int var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return 0;
             }
 
-            var2 = config.get(category, key, 0).getInt();
-        } catch (Exception var6) {
+            return config.get(category, key, 0).getInt();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return 0;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static int getInt(String category, String key, int defaultValue) {
@@ -87,7 +80,7 @@ public class ConfigHandler {
             }
 
             setInt(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -99,22 +92,20 @@ public class ConfigHandler {
     public static double getDouble(String category, String key) {
         config = new Configuration(new File(file));
 
-        double var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return 0.0D;
             }
 
-            var2 = config.get(category, key, 0.0D).getDouble();
-        } catch (Exception var7) {
+            return config.get(category, key, 0.0D).getDouble();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return 0.0D;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static double getDouble(String category, String key, Double defaultValue) {
@@ -127,7 +118,7 @@ public class ConfigHandler {
             }
 
             setDouble(category, key, defaultValue);
-        } catch (Exception var8) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -139,22 +130,20 @@ public class ConfigHandler {
     public static float getFloat(String category, String key) {
         config = new Configuration(new File(file));
 
-        float var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return 0.0F;
             }
 
-            var2 = (float)config.get(category, key, 0.0D).getDouble();
-        } catch (Exception var6) {
+            return (float) config.get(category, key, 0.0D).getDouble();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return 0.0F;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static float getFloat(String category, String key, Float defaultValue) {
@@ -163,11 +152,11 @@ public class ConfigHandler {
         try {
             config.load();
             if (config.getCategory(category).containsKey(key)) {
-                return (float)config.get(category, key, 0.0D).getDouble();
+                return (float) config.get(category, key, 0.0D).getDouble();
             }
 
             setFloat(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -179,22 +168,20 @@ public class ConfigHandler {
     public static String getString(String category, String key) {
         config = new Configuration(new File(file));
 
-        String var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return "";
             }
 
-            var2 = config.get(category, key, "").getString();
-        } catch (Exception var6) {
+            return config.get(category, key, "").getString();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return "";
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static String getString(String category, String key, String defaultValue) {
@@ -207,7 +194,7 @@ public class ConfigHandler {
             }
 
             setString(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -219,22 +206,20 @@ public class ConfigHandler {
     public static short getShort(String category, String key) {
         config = new Configuration(new File(file));
 
-        short var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return 0;
             }
 
-            var2 = (short)config.get(category, key, 0).getInt();
-        } catch (Exception var6) {
+            return (short) config.get(category, key, 0).getInt();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return 0;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static short getShort(String category, String key, short defaultValue) {
@@ -243,11 +228,11 @@ public class ConfigHandler {
         try {
             config.load();
             if (config.getCategory(category).containsKey(key)) {
-                return (short)config.get(category, key, 0).getInt();
+                return (short) config.get(category, key, 0).getInt();
             }
 
             setShort(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -259,22 +244,20 @@ public class ConfigHandler {
     public static byte getByte(String category, String key) {
         config = new Configuration(new File(file));
 
-        byte var2;
         try {
             config.load();
             if (!config.getCategory(category).containsKey(key)) {
                 return 0;
             }
 
-            var2 = (byte)config.get(category, key, 0).getInt();
-        } catch (Exception var6) {
+            return (byte) config.get(category, key, 0).getInt();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return 0;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static byte getByte(String category, String key, byte defaultValue) {
@@ -283,11 +266,11 @@ public class ConfigHandler {
         try {
             config.load();
             if (config.getCategory(category).containsKey(key)) {
-                return (byte)config.get(category, key, 0).getInt();
+                return (byte) config.get(category, key, 0).getInt();
             }
 
             setByte(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -299,22 +282,18 @@ public class ConfigHandler {
     public static boolean getBoolean(String category, String key) {
         config = new Configuration(new File(file));
 
-        boolean var2;
         try {
             config.load();
-            if (!config.getCategory(category).containsKey(key)) {
-                return false;
-            }
+            if (!config.getCategory(category).containsKey(key)) return false;
 
-            var2 = config.get(category, key, false).getBoolean();
-        } catch (Exception var6) {
+            return config.get(category, key, false).getBoolean();
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
             return false;
         } finally {
             config.save();
         }
 
-        return var2;
     }
 
     public static boolean getBoolean(String category, String key, boolean defaultValue) {
@@ -327,7 +306,7 @@ public class ConfigHandler {
             }
 
             setBoolean(category, key, defaultValue);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -344,7 +323,7 @@ public class ConfigHandler {
             config.load();
             String set = config.get(category, key, value).getString();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -359,7 +338,7 @@ public class ConfigHandler {
             config.load();
             int set = config.get(category, key, value).getInt();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -374,7 +353,7 @@ public class ConfigHandler {
             config.load();
             boolean set = config.get(category, key, value).getBoolean();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -389,7 +368,7 @@ public class ConfigHandler {
             config.load();
             double set = config.get(category, key, value).getDouble();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var9) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -404,7 +383,7 @@ public class ConfigHandler {
             config.load();
             int set = config.get(category, key, value).getInt();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -419,7 +398,7 @@ public class ConfigHandler {
             config.load();
             int set = config.get(category, key, value).getInt();
             config.getCategory(category).get(key).set(value);
-        } catch (Exception var7) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -432,9 +411,9 @@ public class ConfigHandler {
 
         try {
             config.load();
-            double set = config.get(category, key, (double)value).getDouble();
-            config.getCategory(category).get(key).set((double)value);
-        } catch (Exception var8) {
+            double set = config.get(category, key, (double) value).getDouble();
+            config.getCategory(category).get(key).set((double) value);
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -449,7 +428,7 @@ public class ConfigHandler {
         try {
             config.load();
             return config.hasCategory(category);
-        } catch (Exception var5) {
+        } catch (Exception exception) {
             System.out.println("Cannot load configuration file!");
         } finally {
             config.save();
@@ -466,9 +445,9 @@ public class ConfigHandler {
             if (config.hasCategory(category)) {
                 return config.getCategory(category).containsKey(key);
             }
-
-        } catch (Exception var6) {
+        } catch (Exception ex) {
             System.out.println("Cannot load configuration file!");
+            ex.printStackTrace();
             return false;
         } finally {
             config.save();
