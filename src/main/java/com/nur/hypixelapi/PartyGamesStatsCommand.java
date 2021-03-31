@@ -44,28 +44,29 @@ public class PartyGamesStatsCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if("".equals(HypixelAPIMod.apiKey)){
-            sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.RED+"API Key not set! Set with /setapikey"));
+        if ("".equals(HypixelAPIMod.apiKey)) {
+            sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "API Key not set! Set with /setapikey"));
             return;
         }
 
         List<String> playersToCheck = new ArrayList<String>();
 
-        if(args.length==0) {
+        if (args.length == 0) {
             Collection<NetworkPlayerInfo> onlinePlayers = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
             for (NetworkPlayerInfo player : onlinePlayers) {
                 playersToCheck.add(player.getGameProfile().getName());
             }
         } else if (args[0].matches("^\\w{2,16}$")) playersToCheck.add(args[0]);
         else {
-            sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.RED+args[0]+" is not a valid IGN!"));
+            sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + args[0] + " is not a valid IGN!"));
             return;
         }
 
-        for(final String player : playersToCheck) {
+        for (final String player : playersToCheck) {
             new Thread(new Runnable() {
                 final String playerName = player;
-                final ChatStyle style = new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/"+playerName));
+                final ChatStyle style = new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/" + playerName));
+
                 public void run() {
                     try {
                         URL url = new URL("https://api.hypixel.net/player?key=" + HypixelAPIMod.apiKey + "&name=" + playerName);
@@ -80,8 +81,8 @@ public class PartyGamesStatsCommand implements ICommand {
                         in.close();
                         JsonObject j = HypixelAPIMod.parser.parse(response.toString()).getAsJsonObject();
 
-                        if(!(j.has("player") && !j.get("player").isJsonNull() && j.get("player").getAsJsonObject().has("stats") && j.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Arcade") && j.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Arcade").getAsJsonObject().has("wins_party"))) {
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName+"'s Party Games stats.").setChatStyle(style));
+                        if (!(j.has("player") && !j.get("player").isJsonNull() && j.get("player").getAsJsonObject().has("stats") && j.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Arcade") && j.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Arcade").getAsJsonObject().has("wins_party"))) {
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName + "'s Party Games stats.").setChatStyle(style));
                             return;
                         }
 
@@ -89,12 +90,13 @@ public class PartyGamesStatsCommand implements ICommand {
 
                         JsonObject arcadeStats = j.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Arcade").getAsJsonObject();
 
-                        if(arcadeStats.has("wins_party"))Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED+playerName+EnumChatFormatting.GRAY + " has "+EnumChatFormatting.RED+arcadeStats.get("wins_party").getAsInt()+EnumChatFormatting.GRAY+" Party Games wins.").setChatStyle(style));
+                        if (arcadeStats.has("wins_party"))
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + playerName + EnumChatFormatting.GRAY + " has " + EnumChatFormatting.RED + arcadeStats.get("wins_party").getAsInt() + EnumChatFormatting.GRAY + " Party Games wins.").setChatStyle(style));
 
 
                         //Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "ISP: " + EnumChatFormatting.RED + j.get("isp").getAsString()).setChatStyle(style));
                     } catch (IOException e) {
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName+"'s stats. Try /setapikey").setChatStyle(style));
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName + "'s stats. Try /setapikey").setChatStyle(style));
                         e.printStackTrace();
                     }
                 }

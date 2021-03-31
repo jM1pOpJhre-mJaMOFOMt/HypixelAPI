@@ -45,28 +45,29 @@ public class BedwarsStatsCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if("".equals(HypixelAPIMod.apiKey)){
-            sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.RED+"API Key not set! Set with /setapikey"));
+        if ("".equals(HypixelAPIMod.apiKey)) {
+            sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "API Key not set! Set with /setapikey"));
             return;
         }
 
         List<String> playersToCheck = new ArrayList<String>();
 
-        if(args.length==0) {
+        if (args.length == 0) {
             Collection<NetworkPlayerInfo> onlinePlayers = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
             for (NetworkPlayerInfo player : onlinePlayers) {
                 playersToCheck.add(player.getGameProfile().getName());
             }
         } else if (args[0].matches("^\\w{2,16}$")) playersToCheck.add(args[0]);
         else {
-            sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.RED+args[0]+" is not a valid IGN!"));
+            sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + args[0] + " is not a valid IGN!"));
             return;
         }
 
-        for(final String player : playersToCheck) {
+        for (final String player : playersToCheck) {
             new Thread(new Runnable() {
                 final String playerName = player;
-                final ChatStyle style = new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/"+playerName));
+                final ChatStyle style = new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/" + playerName));
+
                 public void run() {
                     try {
                         URL url = new URL("https://api.hypixel.net/player?key=" + HypixelAPIMod.apiKey + "&name=" + playerName);
@@ -81,12 +82,12 @@ public class BedwarsStatsCommand implements ICommand {
                         in.close();
                         JsonObject j = HypixelAPIMod.parser.parse(response.toString()).getAsJsonObject();
 
-                        if(!j.has("player") || j.get("player").isJsonNull() || !j.get("player").getAsJsonObject().has("stats") || !j.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Bedwars")) {
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName+"'s Bedwars stats.").setChatStyle(style));
+                        if (!j.has("player") || j.get("player").isJsonNull() || !j.get("player").getAsJsonObject().has("stats") || !j.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Bedwars")) {
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName + "'s Bedwars stats.").setChatStyle(style));
                             return;
                         }
 
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.WHITE + "Player Information: " + (j.get("player").getAsJsonObject().has("achievements")&&j.get("player").getAsJsonObject().get("achievements").getAsJsonObject().has("bedwars_level")?EnumChatFormatting.RED+"\u272B"+j.get("player").getAsJsonObject().get("achievements").getAsJsonObject().get("bedwars_level").getAsInt()+" ":"") + EnumChatFormatting.RED + playerName).setChatStyle(style));
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.WHITE + "Player Information: " + (j.get("player").getAsJsonObject().has("achievements") && j.get("player").getAsJsonObject().get("achievements").getAsJsonObject().has("bedwars_level") ? EnumChatFormatting.RED + "\u272B" + j.get("player").getAsJsonObject().get("achievements").getAsJsonObject().get("bedwars_level").getAsInt() + " " : "") + EnumChatFormatting.RED + playerName).setChatStyle(style));
 
                         JsonObject bedwarsStats = j.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Bedwars").getAsJsonObject();
 
@@ -95,23 +96,27 @@ public class BedwarsStatsCommand implements ICommand {
 
                         DecimalFormat df = new DecimalFormat("0.00");
 
-                        if(bedwarsStats.has("games_played_bedwars")) gamesPlayed = bedwarsStats.get("games_played_bedwars").getAsInt();
-                        if(gamesPlayed!=0)Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Bedwars Games Played: " + EnumChatFormatting.RED + bedwarsStats.get("games_played_bedwars").getAsInt()).setChatStyle(style));
-                        if(bedwarsStats.has("final_kills_bedwars")) {
+                        if (bedwarsStats.has("games_played_bedwars"))
+                            gamesPlayed = bedwarsStats.get("games_played_bedwars").getAsInt();
+                        if (gamesPlayed != 0)
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Bedwars Games Played: " + EnumChatFormatting.RED + bedwarsStats.get("games_played_bedwars").getAsInt()).setChatStyle(style));
+                        if (bedwarsStats.has("final_kills_bedwars")) {
                             int finalKills = bedwarsStats.get("final_kills_bedwars").getAsInt();
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Final Kills: " + EnumChatFormatting.RED + finalKills+(gamesPlayed!=0?EnumChatFormatting.GRAY+" ("+EnumChatFormatting.RED+df.format((double)finalKills/(double)gamesPlayed)+EnumChatFormatting.GRAY+" avg.)":"")).setChatStyle(style));
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Final Kills: " + EnumChatFormatting.RED + finalKills + (gamesPlayed != 0 ? EnumChatFormatting.GRAY + " (" + EnumChatFormatting.RED + df.format((double) finalKills / (double) gamesPlayed) + EnumChatFormatting.GRAY + " avg.)" : "")).setChatStyle(style));
                         }
-                        if(bedwarsStats.has("beds_broken_bedwars")){
+                        if (bedwarsStats.has("beds_broken_bedwars")) {
                             int bedsBroken = bedwarsStats.get("beds_broken_bedwars").getAsInt();
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Beds Broken: " + EnumChatFormatting.RED + bedsBroken +(gamesPlayed!=0?EnumChatFormatting.GRAY+" ("+EnumChatFormatting.RED+df.format((double)bedsBroken/(double)gamesPlayed)+EnumChatFormatting.GRAY+" avg.)":"")).setChatStyle(style));
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Beds Broken: " + EnumChatFormatting.RED + bedsBroken + (gamesPlayed != 0 ? EnumChatFormatting.GRAY + " (" + EnumChatFormatting.RED + df.format((double) bedsBroken / (double) gamesPlayed) + EnumChatFormatting.GRAY + " avg.)" : "")).setChatStyle(style));
                         }
-                        if(bedwarsStats.has("winstreak")) Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Winstreak: " + EnumChatFormatting.RED + bedwarsStats.getAsJsonObject().get("winstreak").getAsString()).setChatStyle(style));
-                        if(bedwarsStats.has("emerald_resources_collected_bedwars")) Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Collected: " + EnumChatFormatting.GREEN + bedwarsStats.get("emerald_resources_collected_bedwars").getAsInt()+EnumChatFormatting.RED+" / " + EnumChatFormatting.AQUA+ bedwarsStats.get("diamond_resources_collected_bedwars").getAsInt()+EnumChatFormatting.RED+" / "+EnumChatFormatting.GOLD+bedwarsStats.get("gold_resources_collected_bedwars").getAsInt()+EnumChatFormatting.RED+" / "+EnumChatFormatting.GRAY+bedwarsStats.get("iron_resources_collected_bedwars").getAsInt()).setChatStyle(style));
+                        if (bedwarsStats.has("winstreak"))
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Winstreak: " + EnumChatFormatting.RED + bedwarsStats.getAsJsonObject().get("winstreak").getAsString()).setChatStyle(style));
+                        if (bedwarsStats.has("emerald_resources_collected_bedwars"))
+                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "Collected: " + EnumChatFormatting.GREEN + bedwarsStats.get("emerald_resources_collected_bedwars").getAsInt() + EnumChatFormatting.RED + " / " + EnumChatFormatting.AQUA + bedwarsStats.get("diamond_resources_collected_bedwars").getAsInt() + EnumChatFormatting.RED + " / " + EnumChatFormatting.GOLD + bedwarsStats.get("gold_resources_collected_bedwars").getAsInt() + EnumChatFormatting.RED + " / " + EnumChatFormatting.GRAY + bedwarsStats.get("iron_resources_collected_bedwars").getAsInt()).setChatStyle(style));
 
 
                         //Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.WHITE + EnumChatFormatting.BOLD + " * " + EnumChatFormatting.GRAY + "ISP: " + EnumChatFormatting.RED + j.get("isp").getAsString()).setChatStyle(style));
                     } catch (IOException e) {
-                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName+"'s stats. Try /setapikey").setChatStyle(style));
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error while looking up " + playerName + "'s stats. Try /setapikey").setChatStyle(style));
                         e.printStackTrace();
                     }
                 }

@@ -14,8 +14,8 @@ public class HypixelListener {
     @SubscribeEvent
     public void onPlayerJoinedServer(EntityJoinWorldEvent event) {
         if (event.entity != Minecraft.getMinecraft().thePlayer) return;
-        if(Minecraft.getMinecraft().getCurrentServerData()!=null&&!Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().matches("^(?:.+\\.)?hypixel\\.(?:net|io)$"))return;
-        if("".equals(HypixelAPIMod.apiKey))Minecraft.getMinecraft().thePlayer.sendChatMessage("/api new");
+        if (Minecraft.getMinecraft().getCurrentServerData() != null && !Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().matches("^(?:.+\\.)?hypixel\\.(?:net|io)$")) return;
+        if ("".equals(HypixelAPIMod.apiKey)) Minecraft.getMinecraft().thePlayer.sendChatMessage("/api new");
     }
 
 
@@ -25,9 +25,9 @@ public class HypixelListener {
         String regex = "^Your new API key is ([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(msg);
-        if(matcher.find()){
+        if (matcher.find()) {
             HypixelAPIMod.setAPIKey(matcher.group(1));
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(""+ EnumChatFormatting.GREEN+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.GREEN+"Set API key to "+matcher.group(1)+"!"));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("" + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.GREEN + "Set API key to " + matcher.group(1) + "!"));
         } else return;
     }
 }

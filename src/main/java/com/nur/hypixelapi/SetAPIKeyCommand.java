@@ -28,18 +28,18 @@ public class SetAPIKeyCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if(args.length==0){
+        if (args.length == 0) {
             //sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+"/setapikey <api key>"));
             Minecraft.getMinecraft().thePlayer.sendChatMessage("/api new");
             return;
         }
-        try{
+        try {
             HypixelAPIMod.setAPIKey(args[0]);
-        } catch (Exception e){
-            sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.RED+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.RED+"Error occured (likely an invalid API key)!"));
+        } catch (Exception e) {
+            sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.RED + "Error occured (likely an invalid API key)!"));
             return;
         }
-        sender.addChatMessage(new ChatComponentText(""+EnumChatFormatting.GREEN+ EnumChatFormatting.BOLD+"(!) "+EnumChatFormatting.GREEN+"Set API Key!"));
+        sender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "(!) " + EnumChatFormatting.GREEN + "Set API Key!"));
     }
 
     @Override
